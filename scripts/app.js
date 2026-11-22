@@ -128,8 +128,8 @@ const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Qu�
 
 /* ============ BUSCA GUIADA (Onde? -> Qual problema?) ============ */
 const LOCAIS=[
- ['🏠 Casa',['piso','banheiro','mofo','rejunte','gordura','vidro','desinfetar','cheiro','multiuso','estofado','madeira','brilho','inox','panela','ralo','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','agua']],
- ['🌿 Quintal e área externa',['lodo','mato','piso','posobra','ferrugem','placas','piche']],
+ ['🏠 Casa',['piso','banheiro','mofo','rejunte','gordura','vidro','desinfetar','cheiro','multiuso','estofado','madeira','brilho','inox','panela','ralo','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
+ ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','piso','posobra','ferrugem','placas','piche']],
  ['🚗 Carro e moto',['carro','chuvaacida','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','couro','piche','arcond','maos']],
  ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
  ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','frutas','higmaos','desinfetar','piso','ralo','inseto','cheiro']],
