@@ -4,7 +4,7 @@ App web (PWA) que roda na TV touch da loja, no celular e no computador: o client
 Publicado no Netlify (site `nova-quimica-consulta`, repositório GitHub `nova-quimica-app`, id `cee2fab3-eb68-4313-a60c-673392c96dfc`), pasta publicada: `app/`. Cada push no `main` publica sozinho.
 
 ## Como o app é montado
-- `scripts/regras.js` — PROBLEMS (problemas/sujeiras: id, label, kw = palavras de busca, inc/exc = regex no NOME do produto, top = lista de regex do MAIS INDICADO em ordem — regra do dono: primeiro o mais indicado, depois a ordem das marcas), EXTRA (linhas com nome técnico → problemas), USO (modo de uso por tipo), BRANDS (ordem de preferência: Spartan, Start, Audax, depois as outras).
+- `scripts/regras.js` — PROBLEMS (problemas/sujeiras: id, label, kw = palavras de busca, inc/exc = regex no NOME do produto, top = lista de regex do MAIS INDICADO em ordem — regra do dono: primeiro o mais indicado, depois a ordem das marcas; a tela mostra NO MÁXIMO 5 indicações por problema, tamanhos do mesmo produto viram um cartão só), EXTRA (linhas com nome técnico → problemas), USO (modo de uso por tipo), BRANDS (ordem de preferência: Spartan, Start, Audax, depois as outras).
 - `scripts/fotos-site.js` — FOTOSITE: código NossoERP → [foto, página] no site da loja (novaquimica.commercesuite.com.br, plataforma Tray). Usado para a foto do produto e para o botão "Comprar no site". Buscar a foto pelo og:image da página do produto, uma página por vez (o site limita).
 - `scripts/fichas.js` — fichas oficiais dos fabricantes (foto, "para que serve", uso). Fonte: `fichas/*.tsv`.
 - `scripts/app.js` — lógica da tela (busca tolerante a erros, cartões, registro de buscas no Netlify Forms "buscas").
