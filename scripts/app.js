@@ -71,7 +71,11 @@ function card(x,probId){
  <div class="tagrow">${x.p>0?`<span class="price">${brl(x.p)}</span>`:`<span class="price ask">Consulte o preço</span>`}${st}</div>
  ${f?`<p class="serve"><b>Para que serve:</b> ${f.d}</p>`:''}<b>Como usar</b><ol>${u.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
  <div class="box warn"><b>Cuidados:</b> ${u.cuid} Siga sempre as instruções do rótulo.</div>
- <a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></article>`}
+ <div class="acts"><a class="buy" href="${buyUrl(x.n)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
+/* link para a loja online (Tray): busca pelo nome do produto, sem marca/tamanho */
+const LOJA='https://novaquimica.commercesuite.com.br';
+function buyUrl(n){const t=String(n).replace(/\s-\s.*$/,'').replace(/\b\d+([.,]\d+)?\s*(ML|L|LT|LTS|LITROS?|KG|G|GR|UN|CX)\b.*$/i,'').replace(/[^\wÀ-ÿ ]+/g,' ').trim().split(/\s+/).filter(w=>w.length>2&&!/^(PARA|COM|DAS|DOS)$/i.test(w)).slice(0,4).join(' ');
+ return LOJA+'/loja/busca.php?loja=1292209&palavras_busca='+encodeURIComponent(t.toLowerCase())}
 /* foto real do produto, se existir em fotos/CODIGO.jpg */
 const imgUrl=u=>!u?'':u.replace(/^https?:\/\/spartanbrasil\.com\.br\/uploads\/produto\//,'/img/sp/').replace(/^https?:\/\/www\.startquimica\.com\.br\/storage\//,'/img/st/').replace(/^https?:\/\/audaxco\.com\/wp-content\/uploads\//,'/img/ax/');
 function photos(root){root.querySelectorAll('.pic[data-cod]:not([data-done])').forEach(el=>{el.dataset.done=1;
