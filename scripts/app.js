@@ -45,7 +45,7 @@ const byPref=(a,b)=>rank(a)-rank(b)||b.v-a.v;
 const ICON=p=>`<svg viewBox="0 0 120 60"><defs><radialGradient id="g${p.id}" cx=".32" cy=".3"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#7fdcff"/><stop offset="1" stop-color="#0083c4"/></radialGradient></defs><circle cx="38" cy="34" r="20" fill="url(#g${p.id})"/><circle cx="72" cy="22" r="11" fill="url(#g${p.id})"/><circle cx="88" cy="42" r="8" fill="url(#g${p.id})"/></svg>`;
 function tilePic(p){const g=galOf(p.id);if(g.length)return 'fotos-problemas/'+encodeURI(g[0].src);const its=CAT.itens.filter(i=>i.k.includes(p.id)).sort(byPref);for(const i of its){const f=fichaOf(i.n);if(f&&f.img)return imgUrl(f.img)}return ''}
 function tile(p){const n=picks(p).length;const src=tilePic(p);
- return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n===1?'1 indicação':n+' indicações'}</small></button>`}
+ return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n} produtos</small></button>`}
 function home(){document.documentElement.classList.add('home');
  app.innerHTML=`<section class="band homehint"><p>Escreva a sujeira ou o que você quer limpar e toque em <b>Buscar</b>.</p></section>`;q.value='';scrollTo(0,0)}
 function list(items,probId,shown){
