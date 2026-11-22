@@ -23,7 +23,7 @@ const LOCAL=new Set(['banheiro','cozinha','quintal','carro','parede','ambiente',
 const stem=w=>w.replace(/(oes|aes)$/,'ao').replace(/(is)$/,'l').replace(/s$/,'');
 function lev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;const v=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let prev=v[0];v[0]=i;let best=i;for(let j=1;j<=b.length;j++){const t=v[j];v[j]=Math.min(v[j]+1,v[j-1]+1,prev+(a[i-1]===b[j-1]?0:1));prev=t;if(v[j]<best)best=v[j]}if(best>max)return max+1}return v[b.length]}
 function wordHit(tok,kw){const a=stem(tok),b=stem(kw);if(a===b)return 1;if(b.length>=4&&(a.startsWith(b)||b.startsWith(a)&&a.length>=4))return .9;if(b.length>=4&&lev(a,b,b.length>=7?2:1)<=(b.length>=7?2:1))return .8;return 0}
-function findProblems(text){const t=low(text).replace(/[^a-z0-9 -]/g,' ');const toks=t.split(/\s+/).filter(w=>w.length>=3&&!STOP.has(w));const r=[];
+function findProblems(text){const t=low(text).replace(/[^a-z0-9 -]/g,' ');const toks=t.split(/\s+/).filter(w=>(w.length>=3||w==='tv'||w==='pc')&&!STOP.has(w));const r=[];
  PROBLEMS.forEach(p=>{let sc=0;for(const k0 of p.kw){const k=low(k0);if(k.includes(' ')){if(t.includes(k))sc+=k.length*1.2;else{const parts=k.split(' ').filter(w=>w.length>=3&&!STOP.has(w));if(parts.length>=2&&parts.every(w=>toks.some(x=>wordHit(x,w))))sc+=k.length*.6}}else{let best=0;for(const x of toks)best=Math.max(best,wordHit(x,k));sc+=best*k.length*(LOCAL.has(k)?.3:1)}}
  for(const w of low(p.label).split(/[^a-z]+/).filter(w=>w.length>=4&&!STOP.has(w))){if(toks.some(x=>wordHit(x,w)>=.9))sc+=2}
  if(sc)r.push([sc,p])});return r.sort((a,b)=>b[0]-a[0]).map(x=>x[1])}
