@@ -809,22 +809,16 @@ function list(items,probId,shown){
  const more=items.length-shown;
  return items.slice(0,shown).map(i=>card(i,probId)).join('')+(more>0?`<button class="more" data-more="${probId||''}" data-shown="${shown}">Ver mais ${Math.min(more,PAGE)} de ${more} produtos</button>`:'')}
 let lastItems=[];
-/* até 5 indicações por problema: mais indicado primeiro, depois marcas; tamanhos do mesmo produto viram um cartão só */
-const MAXP=5;
+/* mais indicado primeiro, depois marcas; tamanhos do mesmo produto viram um cartão só */
 const famOf=n=>normTxt(n).replace(/\(.*?\)/g,' ').replace(/\b\d+([.,]\d+)?\s*(ML|L|LT|LTS|LITROS?|KG|G|GR|GRS|UN|UND)\b/g,' ').replace(/\b(GALAO|BOMBONA|BD|SC|FRASCO|REFIL)\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim();
 function picks(p){const all=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>tierOf(p,a)-tierOf(p,b)||byPref(a,b));
  const fam=new Map();for(const i of all){const f=famOf(i.n);if(fam.has(f))fam.get(f).push(i);else fam.set(f,[i])}
- /* variedade: no máximo 2 do mesmo grupo "mais indicado" antes de completar com o resto */
- const gs=[...fam.values()],out=[],cnt={};
- for(const g of gs){const t=tierOf(p,g[0]);if(out.length<MAXP&&(cnt[t]||0)<2){out.push(g);cnt[t]=(cnt[t]||0)+1}}
- for(const g of gs){if(out.length>=MAXP)break;if(!out.includes(g))out.push(g)}
- out.sort((a,b)=>gs.indexOf(a)-gs.indexOf(b));
- return out.map(g=>Object.assign({},g[0],{alt:g.slice(1)}))}
+ return [...fam.values()].map(g=>Object.assign({},g[0],{alt:g.slice(1)}))}
 function showProblem(p,extra){document.documentElement.classList.remove('home');
  lastItems=picks(p);
  app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button>
- <div class="res-h"><h2>${p.label}</h2><span>${lastItems.length===1?'1 produto indicado':lastItems.length+' produtos indicados'}</span></div>
- ${gallery(p)}${p.dica?`<div class="box dica"><b>Dica:</b> ${p.dica}</div>`:''}<div id="list">${lastItems.map(i=>card(i,p.id)).join('')}</div>
+ <div class="res-h"><h2>${p.label}</h2><span>${lastItems.length} produto(s) em estoque</span></div>
+ ${gallery(p)}${p.dica?`<div class="box dica"><b>Dica:</b> ${p.dica}</div>`:''}<div id="list">${list(lastItems,p.id,PAGE)}</div>
  ${extra&&extra.length?`<h2>Talvez você procure</h2><div class="grid">${extra.map(tile).join('')}</div>`:''}</section>`;scrollTo(0,0)}
 function showNames(items,text){document.documentElement.classList.remove('home');
  lastItems=items;
