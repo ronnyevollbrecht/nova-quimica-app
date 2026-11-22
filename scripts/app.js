@@ -92,7 +92,7 @@ function card(x,probId){
  ${x.alt&&x.alt.length?`<p class="sizes"><b>Outras fragrâncias e tamanhos:</b> ${x.alt.slice(0,6).map(a=>esc(a.n.replace(/\s-\s.*$/,'').toLowerCase())+(a.p>0?' — '+brl(a.p):'')).join(' · ')}${x.alt.length>6?` · e mais ${x.alt.length-6}`:''}</p>`:''}
  ${f?`<p class="serve"><b>Para que serve:</b> ${f.d}</p>`:''}<b>Como usar</b><ol>${u.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
  <div class="box warn"><b>Cuidados:</b> ${u.cuid} Siga sempre as instruções do rótulo.</div>
- <div class="acts"><a class="buy" href="${buyUrl(x)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
+ <div class="acts"><a class="buy" href="${buyUrl(x)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="wpp" href="${wppUrl(x)}" target="_blank" rel="noopener">💬 Tirar dúvida no WhatsApp</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
 /* link para a loja online (Tray): busca pelo nome do produto, sem marca/tamanho */
 const LOJA='https://novaquimica.commercesuite.com.br';
 let WF=null;
@@ -120,6 +120,29 @@ function doSearch(){kb.classList.remove('on');const t=q.value.trim();if(!t)retur
  const ps=findProblems(t);if(ps.length){logSearch(t,ps[0].id);showProblem(ps[0],ps.slice(1,4));return}
  const ns=findByName(t);logSearch(t,ns.length?'nome-produto':'NAO_ENCONTRADO');ns.length?showNames(ns,t):notFound(t)}
 document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();doSearch()});
+
+/* ============ WHATSAPP DA LOJA ============ */
+const WPP='5569993020996';
+const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Química! Vi no app de consulta e tenho uma dúvida sobre: '+x.n+' (cód. '+x.c+').');
+(()=>{const a=document.createElement('a');a.className='wfab';a.href='https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Química! Vim pelo app de consulta.');a.target='_blank';a.rel='noopener';a.textContent='💬 WhatsApp';document.body.appendChild(a)})();
+
+/* ============ BUSCA GUIADA (Onde? -> Qual problema?) ============ */
+const LOCAIS=[
+ ['🏠 Casa',['piso','banheiro','mofo','rejunte','gordura','vidro','desinfetar','cheiro','multiuso','estofado','madeira','brilho','inox','panela','ralo','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','agua']],
+ ['🌿 Quintal e área externa',['lodo','mato','piso','posobra','ferrugem','placas','piche']],
+ ['🚗 Carro e moto',['carro','chuvaacida','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','couro','piche','arcond','maos']],
+ ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
+ ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','frutas','higmaos','desinfetar','piso','ralo','inseto','cheiro']],
+ ['👕 Roupas e lavanderia',['roupaamarelada','roupa','tecido','passar','amaciar','maquina']],
+ ['🏢 Empresa, clínica e condomínio',['desinfetar','piso','banheiro','vidro','brilho','cheiro','higmaos','arcond','posobra','inseto','multiuso']]];
+const guia=document.getElementById('guia');
+function guiaRender(sel){const has=id=>PB[id]&&CAT.itens.some(i=>i.k.includes(id));
+ let h=`<h3>Ou escolha onde você quer limpar:</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
+ if(sel!=null){h+=`<div class="step2"><h3>Qual é o problema?</h3><div class="chips">${LOCAIS[sel][1].filter(has).map(id=>`<button type="button" data-gp="${id}">${esc(PB[id].label)}</button>`).join('')}</div></div>`}
+ guia.innerHTML=h}
+guia.addEventListener('click',e=>{const l=e.target.closest('[data-loc]');if(l){const i=+l.dataset.loc;guiaRender(i);const s2=guia.querySelector('.step2');if(s2)s2.scrollIntoView({behavior:'smooth',block:'nearest'});return}
+ const g=e.target.closest('[data-gp]');if(g){const p=PB[g.dataset.gp];logSearch('[guiada] '+p.label,p.id);showProblem(p,[])}});
+guiaRender(null);
 
 /* ============ TECLADO NA TELA ============ */
 const kb=document.getElementById('kb');

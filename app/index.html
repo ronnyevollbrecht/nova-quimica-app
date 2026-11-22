@@ -81,7 +81,17 @@ ol{margin:0 0 14px;padding-left:1.3em}ol li{margin-bottom:6px}
 .name{color:var(--head)}h2{color:var(--head)}
 .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
 .buy{display:inline-flex;align-items:center;gap:10px;background:#1f9d55;color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px;min-height:52px}
-html.tv .buy{display:none}
+html.tv .buy,html.tv .wpp{display:none}
+.wpp{display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px;min-height:52px}
+html:not(.tv) .wpp{min-height:40px;padding:8px 14px;font-size:14.5px;border-radius:10px}
+.guia{display:none;margin:22px auto 0;max-width:1100px;width:100%;text-align:center}html.home .guia{display:block}
+.guia h3{margin:0 0 12px;font-size:clamp(17px,2vw,28px);font-weight:800}
+.guia .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.guia button{background:rgba(255,255,255,.12);color:#fff;border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;font-size:clamp(15px,1.6vw,22px);cursor:pointer}
+.guia button.on,.guia button:hover{background:#fff;color:var(--navy);border-color:#fff}
+.guia .step2{margin-top:18px}.guia .step2 button{background:#fff;color:var(--navy);border-color:#fff;font-weight:600}
+html:not(.tv) .guia button{padding:8px 14px;font-size:14.5px}
+.wfab{position:fixed;right:16px;bottom:16px;z-index:50;background:#25d366;color:#fff;border-radius:999px;padding:12px 16px;font-weight:800;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}html.tv .wfab{display:none}
 html:not(.tv) .buy{min-height:40px;padding:8px 14px;font-size:14.5px;border-radius:10px}
 .video{display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px;min-height:52px}
 .novideo{color:var(--mut);font-size:16px}
@@ -150,7 +160,7 @@ html.home .hero{min-height:calc(100vh - 150px);display:flex;flex-direction:colum
 .hero .search{width:100%;box-sizing:border-box}
 .search input{min-width:0}
 .homehint{text-align:center;color:var(--mut)}html.home .homehint{display:none}
-html.home .hero::after{content:'Escreva a sujeira ou o que você quer limpar e toque em Buscar';display:block;text-align:center;margin-top:16px;opacity:.8;font-size:clamp(15px,1.6vw,22px)}
+html.home .hero::after{content:'';display:none;display:block;text-align:center;margin-top:16px;opacity:.8;font-size:clamp(15px,1.6vw,22px)}
 .sizes{margin:6px 0 8px;font-size:.92em;color:var(--mut)}.sizes b{color:inherit}
 .tp.gal1 img{inset:0;width:100%;height:100%;object-fit:cover}
 html:not(.tv) .tp{height:78px;border-radius:10px}
@@ -186,6 +196,7 @@ html:not(.tv) .gal-item{flex-basis:min(100%,400px)}
     <button type="submit">Buscar</button>
   </form>
   <div class="kb" id="kb"></div>
+  <div class="guia" id="guia"></div>
   </div>
 </header>
 
@@ -900,7 +911,7 @@ function card(x,probId){
  ${x.alt&&x.alt.length?`<p class="sizes"><b>Outras fragrâncias e tamanhos:</b> ${x.alt.slice(0,6).map(a=>esc(a.n.replace(/\s-\s.*$/,'').toLowerCase())+(a.p>0?' — '+brl(a.p):'')).join(' · ')}${x.alt.length>6?` · e mais ${x.alt.length-6}`:''}</p>`:''}
  ${f?`<p class="serve"><b>Para que serve:</b> ${f.d}</p>`:''}<b>Como usar</b><ol>${u.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
  <div class="box warn"><b>Cuidados:</b> ${u.cuid} Siga sempre as instruções do rótulo.</div>
- <div class="acts"><a class="buy" href="${buyUrl(x)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
+ <div class="acts"><a class="buy" href="${buyUrl(x)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="wpp" href="${wppUrl(x)}" target="_blank" rel="noopener">💬 Tirar dúvida no WhatsApp</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
 /* link para a loja online (Tray): busca pelo nome do produto, sem marca/tamanho */
 const LOJA='https://novaquimica.commercesuite.com.br';
 let WF=null;
@@ -928,6 +939,29 @@ function doSearch(){kb.classList.remove('on');const t=q.value.trim();if(!t)retur
  const ps=findProblems(t);if(ps.length){logSearch(t,ps[0].id);showProblem(ps[0],ps.slice(1,4));return}
  const ns=findByName(t);logSearch(t,ns.length?'nome-produto':'NAO_ENCONTRADO');ns.length?showNames(ns,t):notFound(t)}
 document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();doSearch()});
+
+/* ============ WHATSAPP DA LOJA ============ */
+const WPP='5569993020996';
+const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Química! Vi no app de consulta e tenho uma dúvida sobre: '+x.n+' (cód. '+x.c+').');
+(()=>{const a=document.createElement('a');a.className='wfab';a.href='https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Química! Vim pelo app de consulta.');a.target='_blank';a.rel='noopener';a.textContent='💬 WhatsApp';document.body.appendChild(a)})();
+
+/* ============ BUSCA GUIADA (Onde? -> Qual problema?) ============ */
+const LOCAIS=[
+ ['🏠 Casa',['piso','banheiro','mofo','rejunte','gordura','vidro','desinfetar','cheiro','multiuso','estofado','madeira','brilho','inox','panela','ralo','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','agua']],
+ ['🌿 Quintal e área externa',['lodo','mato','piso','posobra','ferrugem','placas','piche']],
+ ['🚗 Carro e moto',['carro','chuvaacida','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','couro','piche','arcond','maos']],
+ ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
+ ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','frutas','higmaos','desinfetar','piso','ralo','inseto','cheiro']],
+ ['👕 Roupas e lavanderia',['roupaamarelada','roupa','tecido','passar','amaciar','maquina']],
+ ['🏢 Empresa, clínica e condomínio',['desinfetar','piso','banheiro','vidro','brilho','cheiro','higmaos','arcond','posobra','inseto','multiuso']]];
+const guia=document.getElementById('guia');
+function guiaRender(sel){const has=id=>PB[id]&&CAT.itens.some(i=>i.k.includes(id));
+ let h=`<h3>Ou escolha onde você quer limpar:</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
+ if(sel!=null){h+=`<div class="step2"><h3>Qual é o problema?</h3><div class="chips">${LOCAIS[sel][1].filter(has).map(id=>`<button type="button" data-gp="${id}">${esc(PB[id].label)}</button>`).join('')}</div></div>`}
+ guia.innerHTML=h}
+guia.addEventListener('click',e=>{const l=e.target.closest('[data-loc]');if(l){const i=+l.dataset.loc;guiaRender(i);const s2=guia.querySelector('.step2');if(s2)s2.scrollIntoView({behavior:'smooth',block:'nearest'});return}
+ const g=e.target.closest('[data-gp]');if(g){const p=PB[g.dataset.gp];logSearch('[guiada] '+p.label,p.id);showProblem(p,[])}});
+guiaRender(null);
 
 /* ============ TECLADO NA TELA ============ */
 const kb=document.getElementById('kb');
