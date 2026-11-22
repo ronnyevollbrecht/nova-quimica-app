@@ -1,4 +1,31 @@
 {
-  "_como_usar": "Para cada problema (id do problema em scripts/regras.js), liste as fotos desta pasta. rotulo é opcional: Antes, Depois ou um texto curto.",
-  "fotos": {}
+ "_como_usar": "Para cada problema (id do problema em scripts/regras.js), liste as fotos desta pasta. rotulo é opcional: Antes, Depois ou um texto curto.",
+ "fotos": {
+  "piso": [
+   {
+    "src": "piso-1.jpg",
+    "rotulo": "Porcelanato: antes e depois"
+   },
+   {
+    "src": "piso-2.jpg",
+    "rotulo": "Piso manchado"
+   }
+  ],
+  "chuvaacida": [
+   {
+    "src": "chuvaacida-1.jpg",
+    "rotulo": "Vidro do carro com chuva ácida"
+   },
+   {
+    "src": "chuvaacida-2.jpg",
+    "rotulo": "Pintura: com mancha x tratada"
+   }
+  ],
+  "vidro": [
+   {
+    "src": "vidro-1.jpg",
+    "rotulo": "Box de vidro com manchas"
+   }
+  ]
+ }
 }
