@@ -46,8 +46,8 @@ const ICON=p=>`<svg viewBox="0 0 120 60"><defs><radialGradient id="g${p.id}" cx=
 function tilePic(p){const g=galOf(p.id);if(g.length)return 'fotos-problemas/'+encodeURI(g[0].src);const its=CAT.itens.filter(i=>i.k.includes(p.id)).sort(byPref);for(const i of its){const f=fichaOf(i.n);if(f&&f.img)return imgUrl(f.img)}return ''}
 function tile(p){const n=picks(p).length;const src=tilePic(p);
  return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n===1?'1 indicação':n+' indicações'}</small></button>`}
-function home(){const ps=PROBLEMS.filter(p=>CAT.itens.some(i=>i.k.includes(p.id)));
- app.innerHTML=`<section class="band"><h2>Escolha o seu problema</h2><div class="grid">${ps.map(tile).join('')}</div></section>`;q.value='';scrollTo(0,0)}
+function home(){document.documentElement.classList.add('home');
+ app.innerHTML=`<section class="band homehint"><p>Escreva a sujeira ou o que você quer limpar e toque em <b>Buscar</b>.</p></section>`;q.value='';scrollTo(0,0)}
 function list(items,probId,shown){
  const more=items.length-shown;
  return items.slice(0,shown).map(i=>card(i,probId)).join('')+(more>0?`<button class="more" data-more="${probId||''}" data-shown="${shown}">Ver mais ${Math.min(more,PAGE)} de ${more} produtos</button>`:'')}
@@ -63,17 +63,17 @@ function picks(p){const all=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>
  for(const g of gs){if(out.length>=MAXP)break;if(!out.includes(g))out.push(g)}
  out.sort((a,b)=>gs.indexOf(a)-gs.indexOf(b));
  return out.map(g=>Object.assign({},g[0],{alt:g.slice(1)}))}
-function showProblem(p,extra){
+function showProblem(p,extra){document.documentElement.classList.remove('home');
  lastItems=picks(p);
  app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button>
  <div class="res-h"><h2>${p.label}</h2><span>${lastItems.length===1?'1 produto indicado':lastItems.length+' produtos indicados'}</span></div>
  ${gallery(p)}${p.dica?`<div class="box dica"><b>Dica:</b> ${p.dica}</div>`:''}<div id="list">${lastItems.map(i=>card(i,p.id)).join('')}</div>
  ${extra&&extra.length?`<h2>Talvez você procure</h2><div class="grid">${extra.map(tile).join('')}</div>`:''}</section>`;scrollTo(0,0)}
-function showNames(items,text){
+function showNames(items,text){document.documentElement.classList.remove('home');
  lastItems=items;
  app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button>
  <div class="res-h"><h2>Resultados para “${esc(text)}”</h2><span>${items.length} produto(s)</span></div><div id="list">${list(items,'',PAGE)}</div></section>`;scrollTo(0,0)}
-function notFound(text){app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button><div class="empty"><img src="mascote.png" alt="" onerror="this.remove()"><div><b>Não encontramos “${esc(text)}”.</b><br>Tente outras palavras, escolha um dos problemas na tela inicial ou fale com um de nossos vendedores — vamos te ajudar!</div></div></section>`}
+function notFound(text){document.documentElement.classList.remove('home');app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button><div class="empty"><img src="mascote.png" alt="" onerror="this.remove()"><div><b>Não encontramos “${esc(text)}”.</b><br>Tente outras palavras, fale com um de nossos vendedores — vamos te ajudar!</div></div></section>`}
 function card(x,probId){
  const p=PB[probId]||PB[x.k[0]];const f=fichaOf(x.n);const u0=usage(x.n);const u={steps:f&&f.u?f.u:u0.steps,cuid:u0.cuid};
  const st=x.e<=3?`<span class="stock low">Últimas unidades</span>`:`<span class="stock ok">Em estoque</span>`;
