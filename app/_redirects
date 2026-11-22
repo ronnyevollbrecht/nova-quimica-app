@@ -1,0 +1,4 @@
+# Fotos dos fabricantes servidas pelo próprio site (evita bloqueio de https / hotlink)
+/img/sp/*  http://spartanbrasil.com.br/uploads/produto/:splat  200
+/img/st/*  https://www.startquimica.com.br/storage/:splat  200
+/img/ax/*  https://audaxco.com/wp-content/uploads/:splat  200
