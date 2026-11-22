@@ -130,7 +130,7 @@ const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Qu�
 const LOCAIS=[
  ['🏠 Casa',['piso','porcelanato','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','mofo','rejunte','gordura','vidro','desinfetar','cheiro','multiuso','estofado','madeira','brilho','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
  ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','piso','posobra','ferrugem','placas','piche']],
- ['🚗 Carro e moto',['carro','chuvaacida','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','couro','piche','arcond','maos']],
+ ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','couro','piche','arcond','maos']],
  ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
  ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','aluminio','frutas','higmaos','desinfetar','piso','ralo','entupimento','inseto','cheiro']],
  ['👕 Roupas e lavanderia',['roupaamarelada','roupa','tecido','passar','amaciar','maquina']],
