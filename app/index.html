@@ -948,6 +948,15 @@ const FOTOSITE={
 "039725":["amaciante_concentrado_15l_cha_branco_unica_aroma_1_20260709102621_2fc98ee3e88b.png","limpeza-geral/amaciantes/amaciante-concentrado-1-5l-cha-branco-unica-aromasil"],
 "039726":["amaciante_concentrado_15l_cha_branco_unica_aroma_1_20260709102621_2fc98ee3e88b.png","limpeza-geral/amaciantes/amaciante-concentrado-1-5l-cha-branco-unica-aromasil"]
 };
+
+/* fotos ilustrativas dos fabricantes (site oficial da marca): código NossoERP -> foto */
+const FOTOFAB={
+"002667": "https://www.ype.ind.br/assets-NS/neutro-500ml-(1)-1699368103-1793999927.png",
+"002726": "https://www.ype.ind.br/assets-NS/tixan_cartucho_400g_primavera_lateral_-1772202764-1794340016.png",
+"005005": "https://www.ype.ind.br/assets-NS/agua-sanitaria-1l-1.png",
+"034453": "https://www.ype.ind.br/assets-NS/tixan_cartucho_400g_primavera_lateral_-1772202764-1794340016.png",
+"037327": "https://www.ype.ind.br/assets-NS/clear-500ml.png"
+};
 /* ============ DADOS ============ */
 let CAT={ts:0,fonte:'',itens:[]};
 function setCat(c,src){if(c&&Array.isArray(c.itens)&&c.itens.length&&(c.ts||0)>=CAT.ts){CAT=c;CAT.src=src;return true}return false}
@@ -1036,7 +1045,7 @@ function card(x,probId){
  const st=x.e<=3?`<span class="stock low">Últimas unidades</span>`:`<span class="stock ok">Em estoque</span>`;
  const yt='https://www.youtube.com/results?search_query='+encodeURIComponent('como usar '+x.n.replace(/\s-\s.*$/,''));
  const draw=p&&p.art?`<div class="ba"><figure>${art(p.art,false)}<figcaption>Antes</figcaption></figure><figure>${art(p.art,true)}<figcaption>Depois</figcaption></figure></div>`:`<div class="mas">${art(null,false,400,260)}<img src="mascote.png" alt="" onerror="this.remove()"></div>`;
- return `<article class="card"><div class="pic" data-cod="${x.c}"${(()=>{if(f&&f.img)return ` data-img="${imgUrl(f.img)}"`;const fam=[x,...(x.alt||[])];const s=fam.find(y=>FOTOSITE[y.c]);if(s)return ` data-img="${SITE_IMG+FOTOSITE[s.c][0]}" data-site="1"`;const g=fam.map(y=>fichaOf(y.n)).find(z=>z&&z.img);return g?` data-img="${imgUrl(g.img)}"`:''})()}>${draw}</div>
+ return `<article class="card"><div class="pic" data-cod="${x.c}"${(()=>{if(f&&f.img)return ` data-img="${imgUrl(f.img)}"`;const fam=[x,...(x.alt||[])];const s=fam.find(y=>FOTOSITE[y.c]);if(s)return ` data-img="${SITE_IMG+FOTOSITE[s.c][0]}" data-site="1"`;const g=fam.map(y=>fichaOf(y.n)).find(z=>z&&z.img);if(g)return ` data-img="${imgUrl(g.img)}"`;const fb=fam.find(y=>typeof FOTOFAB!=='undefined'&&FOTOFAB[y.c]);return fb?` data-img="${FOTOFAB[fb.c]}"`:''})()}>${draw}</div>
  <div><h3 class="name">${pretty(x.n)}</h3><div class="brand">${(()=>{const b=brandOf(x.n);return b[1]?`<span class="chip">${b[1]}</span>`:''})()}Cód. ${x.c} · ${esc(x.u)}</div>
  <div class="tagrow">${x.p>0?`<span class="price">${brl(x.p)}</span>`:`<span class="price ask">Consulte o preço</span>`}${st}</div>
  ${x.alt&&x.alt.length?`<p class="sizes"><b>Outras fragrâncias e tamanhos:</b> ${x.alt.slice(0,6).map(a=>esc(a.n.replace(/\s-\s.*$/,'').toLowerCase())+(a.p>0?' — '+brl(a.p):'')).join(' · ')}${x.alt.length>6?` · e mais ${x.alt.length-6}`:''}</p>`:''}
