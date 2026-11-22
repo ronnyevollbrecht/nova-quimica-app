@@ -54,9 +54,21 @@ function list(items,probId,shown){
 let lastItems=[];
 /* mais indicado primeiro, depois marcas; tamanhos do mesmo produto viram um cartão só */
 const famOf=n=>normTxt(n).replace(/\(.*?\)/g,' ').replace(/\b\d+([.,]\d+)?\s*(ML|L|LT|LTS|LITROS?|KG|G|GR|GRS|UN|UND)\b/g,' ').replace(/\b(GALAO|BOMBONA|BD|SC|FRASCO|REFIL)\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim();
-function picks(p){const all=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>tierOf(p,a)-tierOf(p,b)||byPref(a,b));
- const fam=new Map();for(const i of all){const f=famOf(i.n);if(fam.has(f))fam.get(f).push(i);else fam.set(f,[i])}
- return [...fam.values()].map(g=>Object.assign({},g[0],{alt:g.slice(1)}))}
+function famGroups(p){const all=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>tierOf(p,a)-tierOf(p,b)||byPref(a,b));
+ const fam=new Map();for(const i of all){const f=famOf(i.n);if(fam.has(f))fam.get(f).push(i);else fam.set(f,[i])}return [...fam.values()]}
+/* regra do dono: 1º um Spartan, 2º um Start, 3º um Audax (o mais indicado de cada marca), depois as demais marcas.
+   Evita repetir o mesmo produto como destaque em vários problemas. */
+let LEADS=null,LEADS_CAT=null;
+function leadsAll(){if(LEADS&&LEADS_CAT===CAT)return LEADS;LEADS={};LEADS_CAT=CAT;const used=new Set();
+ for(const p of PROBLEMS){const gs=famGroups(p);const L=[];
+  for(const r of [0,1,2]){const c=gs.filter(g=>rank(g[0])===r);if(!c.length)continue;
+   const t0=tierOf(p,c[0][0]);const pick=c.find(g=>tierOf(p,g[0])===t0&&!used.has(famOf(g[0].n)))||c.find(g=>!used.has(famOf(g[0].n)))||c[0];
+   L.push(pick);used.add(famOf(pick[0].n))}
+  LEADS[p.id]=L}
+ return LEADS}
+function picks(p){const gs=famGroups(p);const lk=new Set((leadsAll()[p.id]||[]).map(g=>famOf(g[0].n)));const L=gs.filter(g=>lk.has(famOf(g[0].n))).sort((a,b)=>rank(a[0])-rank(b[0]));
+ const rest=gs.filter(g=>!lk.has(famOf(g[0].n))).sort((a,b)=>(rank(a[0])===3?0:1)-(rank(b[0])===3?0:1)||tierOf(p,a[0])-tierOf(p,b[0])||byPref(a[0],b[0]));
+ return [...L,...rest].map(g=>Object.assign({},g[0],{alt:g.slice(1)}))}
 function showProblem(p,extra){document.documentElement.classList.remove('home');
  lastItems=picks(p);
  app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button>

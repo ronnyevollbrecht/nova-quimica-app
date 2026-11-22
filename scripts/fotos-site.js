@@ -82,6 +82,7 @@ const FOTOSITE={
 "031366":["extractus_sensitive_3l_vonixx_727_1_8e23220d1fe66e04beb2cf8f9f1e7207.png","extractus-sensitive-3l-vonixx"],
 "031367":["extractus_sensitive_3l_vonixx_727_1_8e23220d1fe66e04beb2cf8f9f1e7207.png","extractus-sensitive-3l-vonixx"],
 "032176":["tuff_coco_lava_roupas_finas_e_delicadas_2259_1_0bb231a2e9e85bc2c12eb1fa623328b7.png","start/start/tuff-coco-lava-roupas-finas-e-delicadas"],
+"032394":["npf_2000_alcalino_start_2107_1_e6f4c0b7d222f58742caa314987d2a91.png","npf-2000-alcalino-5l-start"],
 "032484":["verse_protetor_de_plasticos_vonixx_745_1_f053b143306d9ac0990c1534c9b2ed44.png","verse-protetor-de-plasticos-500ml-vonixx"],
 "032485":["verse_protetor_de_plasticos_vonixx_745_1_f053b143306d9ac0990c1534c9b2ed44.png","verse-protetor-de-plasticos-500ml-vonixx"],
 "032636":["teste_piscina_ph_cloro_hidroall_3953_1_0656a20398834f8a0e424d7ad518aec3.png","teste-piscina-phcloro-hidroall"],
