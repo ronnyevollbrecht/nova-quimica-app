@@ -116,7 +116,7 @@ const EXTRA=[
  [/AP DRY CLEANER/,['couro','estofado']],
  [/ALVFRESH|CHLOROFRESH|OXYLAVFRESH|DETERFRESH|RUSTFRESH/,['roupa']],
  [/NEUTRA ODOR|AIR ESSENCE|FRESH AIR|CONTEMPO ODOR/,['cheiro']],
- [/PROTECT INOX|BRASS POLISH/,['inox']],
+ [/PROTECT INOX/,['inox']],
  [/WOOD POLISH/,['madeira']],
  [/^(?!APLICADOR).*(BOWL CLEANSE|LIMPA LOUCAS SANITARIAS|CLORO GEL)/,['banheiro','desinfetar']],
  [/CAR WASH AUTOMOTIVE/,['carro']],
@@ -125,7 +125,7 @@ const EXTRA=[
  [/LIMPADOR GEL AZULIM|DESINF\. AZULIM|AZULIM DILUIVEL/,['desinfetar','multiuso']],
  [/AZULIM LIMPA CERAMICA|NPF ?\d+|FX ?\d+ ATIVADO/,['piso']],
  [/TIRA LIMO/,['mofo','rejunte']],
- [/MULTIUSO CREMOSO|SAPONACEO/,['multiuso','inox']],
+ [/MULTIUSO CREMOSO|SAPONACEO/,['multiuso']],
  [/FACILITA MULTIUSO/,['multiuso']],
  [/FACILITA ALCOOL/,['desinfetar']],
  [/REDUTOR PH/,['piscinaph']]
