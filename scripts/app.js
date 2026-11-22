@@ -66,21 +66,26 @@ function card(x,probId){
  const st=x.e<=3?`<span class="stock low">Últimas unidades</span>`:`<span class="stock ok">Em estoque</span>`;
  const yt='https://www.youtube.com/results?search_query='+encodeURIComponent('como usar '+x.n.replace(/\s-\s.*$/,''));
  const draw=p&&p.art?`<div class="ba"><figure>${art(p.art,false)}<figcaption>Antes</figcaption></figure><figure>${art(p.art,true)}<figcaption>Depois</figcaption></figure></div>`:`<div class="mas">${art(null,false,400,260)}<img src="mascote.png" alt="" onerror="this.remove()"></div>`;
- return `<article class="card"><div class="pic" data-cod="${x.c}"${f&&f.img?` data-img="${imgUrl(f.img)}"`:''}>${draw}</div>
+ return `<article class="card"><div class="pic" data-cod="${x.c}"${f&&f.img?` data-img="${imgUrl(f.img)}"`:FOTOSITE[x.c]?` data-img="${SITE_IMG+FOTOSITE[x.c][0]}" data-site="1"`:''}>${draw}</div>
  <div><h3 class="name">${pretty(x.n)}</h3><div class="brand">${(()=>{const b=brandOf(x.n);return b[1]?`<span class="chip">${b[1]}</span>`:''})()}Cód. ${x.c} · ${esc(x.u)}</div>
  <div class="tagrow">${x.p>0?`<span class="price">${brl(x.p)}</span>`:`<span class="price ask">Consulte o preço</span>`}${st}</div>
  ${f?`<p class="serve"><b>Para que serve:</b> ${f.d}</p>`:''}<b>Como usar</b><ol>${u.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
  <div class="box warn"><b>Cuidados:</b> ${u.cuid} Siga sempre as instruções do rótulo.</div>
- <div class="acts"><a class="buy" href="${buyUrl(x.n)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
+ <div class="acts"><a class="buy" href="${buyUrl(x)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
 /* link para a loja online (Tray): busca pelo nome do produto, sem marca/tamanho */
 const LOJA='https://novaquimica.commercesuite.com.br';
-function buyUrl(n){const t=String(n).replace(/\s-\s.*$/,'').replace(/\b\d+([.,]\d+)?\s*(ML|L|LT|LTS|LITROS?|KG|G|GR|UN|CX)\b.*$/i,'').replace(/[^\wÀ-ÿ ]+/g,' ').trim().split(/\s+/).filter(w=>w.length>2&&!/^(PARA|COM|DAS|DOS)$/i.test(w)).slice(0,4).join(' ');
- return LOJA+'/loja/busca.php?loja=1292209&palavras_busca='+encodeURIComponent(t.toLowerCase())}
+let WF=null;
+function buyUrl(x){if(FOTOSITE[x.c])return SITE_URL+FOTOSITE[x.c][1];
+ /* fora do mapa: busca no site pela palavra mais rara do nome (a busca do site junta palavras com OU) */
+ if(!WF){WF={};for(const y of CAT.itens)for(const w of new Set(normTxt(y.n).split(/[^A-Z0-9]+/)))WF[w]=(WF[w]||0)+1}
+ const ws=normTxt(x.n).replace(/\s-\s.*$/,'').split(/[^A-Z0-9]+/).filter(w=>w.length>3&&!/\d/.test(w));
+ const w=ws.sort((a,b)=>(WF[a]||0)-(WF[b]||0))[0]||'';
+ return LOJA+'/loja/busca.php?loja=1292209&palavra_busca='+encodeURIComponent(w.toLowerCase())}
 /* foto real do produto, se existir em fotos/CODIGO.jpg */
 const imgUrl=u=>!u?'':u.replace(/^https?:\/\/spartanbrasil\.com\.br\/uploads\/produto\//,'/img/sp/').replace(/^https?:\/\/www\.startquimica\.com\.br\/storage\//,'/img/st/').replace(/^https?:\/\/audaxco\.com\/wp-content\/uploads\//,'/img/ax/');
 function photos(root){root.querySelectorAll('.pic[data-cod]:not([data-done])').forEach(el=>{el.dataset.done=1;
  const show=(src,cap)=>{const img=new Image();img.onload=()=>{el.innerHTML='';img.alt='';img.className='photo';el.appendChild(img);if(cap){const c=document.createElement('small');c.className='cap';c.textContent=cap;el.appendChild(c)}};return img};
- const local=show(null);local.onerror=()=>{if(el.dataset.img){show(el.dataset.img,'Foto ilustrativa do fabricante').src=el.dataset.img}};local.src='fotos/'+el.dataset.cod+'.jpg'})}
+ const local=show(null);local.onerror=()=>{if(el.dataset.img){show(el.dataset.img,el.dataset.site?'':'Foto ilustrativa do fabricante').src=el.dataset.img}};local.src='fotos/'+el.dataset.cod+'.jpg'})}
 new MutationObserver(()=>photos(app)).observe(app,{childList:true,subtree:true});
 
 app.addEventListener('scroll',e=>{const t=e.target;if(!t.classList||!t.classList.contains('gal-track'))return;const i=Math.round(t.scrollLeft/t.clientWidth);t.parentNode.querySelectorAll('.gal-dots i').forEach((d,j)=>d.classList.toggle('on',j===i))},true);
