@@ -84,7 +84,19 @@ ol{margin:0 0 14px;padding-left:1.3em}ol li{margin-bottom:6px}
 html.tv .buy,html.tv .wpp{display:none}
 .wpp{display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px;min-height:52px}
 html:not(.tv) .wpp{min-height:40px;padding:8px 14px;font-size:14.5px;border-radius:10px}
-.guia{display:none;margin:22px auto 0;max-width:1100px;width:100%;text-align:center}html.home .guia{display:block}
+
+.tabs{display:none;gap:8px;justify-content:center;margin:0 auto 14px}html.home .tabs{display:flex}
+.tabs button{font:inherit;font-weight:800;font-size:clamp(15px,1.7vw,24px);padding:10px 18px;border-radius:999px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer}
+.tabs button.on{background:#fff;color:var(--navy);border-color:#fff}
+html:not(.tv) .tabs button{padding:7px 14px;font-size:14.5px}
+html.home .hero.escolher .search,html.home .hero.escolher .kb{display:none}
+html.home .hero:not(.escolher) .guia{display:none}
+.guia{margin-top:6px}
+.guia .step2 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.guia .step2 button{border-radius:12px;text-align:left;line-height:1.2}
+html:not(.tv) .guia .step2 button{font-size:13.5px;padding:9px 11px}
+html.tv .guia .step2 .chips{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.guia{display:none;margin:6px auto 0;max-width:1100px;width:100%;text-align:center}html.home .guia{display:block}
 .guia h3{margin:0 0 12px;font-size:clamp(17px,2vw,28px);font-weight:800}
 .guia .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .guia button{background:rgba(255,255,255,.12);color:#fff;border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;font-size:clamp(15px,1.6vw,22px);cursor:pointer}
@@ -190,6 +202,7 @@ html:not(.tv) .gal-item{flex-basis:min(100%,400px)}
   <span class="bub" style="width:34px;height:34px;right:4%;bottom:24px"></span>
   <span class="bub" style="width:80px;height:80px;right:24%;bottom:-36px;opacity:.6"></span>
   <h1>O que você quer <em>LIMPAR</em>?</h1>
+  <div class="tabs" id="tabs" role="tablist"><button type="button" class="on" data-tab="escrever" role="tab">🔎 Escrever</button><button type="button" data-tab="escolher" role="tab">👆 Escolher onde limpar</button></div>
   <form class="search" id="f">
     <input id="q" placeholder="Ex.: piso encardido, mofo, vidro manchado" autocomplete="off" aria-label="Descreva seu problema">
     <button type="button" class="kbtoggle" id="kbt">Teclado</button>
@@ -983,7 +996,7 @@ const ICON=p=>`<svg viewBox="0 0 120 60"><defs><radialGradient id="g${p.id}" cx=
 function tilePic(p){const g=galOf(p.id);if(g.length)return 'fotos-problemas/'+encodeURI(g[0].src);const its=CAT.itens.filter(i=>i.k.includes(p.id)).sort(byPref);for(const i of its){const f=fichaOf(i.n);if(f&&f.img)return imgUrl(f.img)}return ''}
 function tile(p){const n=picks(p).length;const src=tilePic(p);
  return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n} produtos</small></button>`}
-function home(){document.documentElement.classList.add('home');
+function home(){document.documentElement.classList.add('home');const hr=document.querySelector('.hero');if(hr){hr.classList.remove('escolher');document.querySelectorAll('#tabs button').forEach((x,i)=>x.classList.toggle('on',i===0))}
  app.innerHTML=`<section class="band homehint"><p>Escreva a sujeira ou o que você quer limpar e toque em <b>Buscar</b>.</p></section>`;q.value='';scrollTo(0,0)}
 function list(items,probId,shown){
  const more=items.length-shown;
@@ -1074,12 +1087,16 @@ const LOCAIS=[
  ['🏢 Empresa, clínica e condomínio',['inox','aluminio','ralo','entupimento','desinfetar','piso','porcelanato','marmorerestauro','marmoreprotecao','banheiro','vidro','brilho','cheiro','higmaos','arcond','posobra','inseto','multiuso']]];
 const guia=document.getElementById('guia');
 function guiaRender(sel){const has=id=>PB[id]&&CAT.itens.some(i=>i.k.includes(id));
- let h=`<h3>Ou escolha onde você quer limpar:</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
+ let h=`<h3>Onde você quer limpar?</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
  if(sel!=null){h+=`<div class="step2"><h3>Qual é o problema?</h3><div class="chips">${LOCAIS[sel][1].filter(has).map(id=>`<button type="button" data-gp="${id}">${esc(PB[id].label)}</button>`).join('')}</div></div>`}
  guia.innerHTML=h}
 guia.addEventListener('click',e=>{const l=e.target.closest('[data-loc]');if(l){const i=+l.dataset.loc;guiaRender(i);const s2=guia.querySelector('.step2');if(s2)s2.scrollIntoView({behavior:'smooth',block:'nearest'});return}
  const g=e.target.closest('[data-gp]');if(g){const p=PB[g.dataset.gp];logSearch('[guiada] '+p.label,p.id);showProblem(p,[])}});
 guiaRender(null);
+const tabs=document.getElementById('tabs'),heroEl=document.querySelector('.hero');
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;
+ tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+ const esc=b.dataset.tab==='escolher';heroEl.classList.toggle('escolher',esc);if(esc)guiaRender(null);else q.focus()});
 
 /* ============ TECLADO NA TELA ============ */
 const kb=document.getElementById('kb');

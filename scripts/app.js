@@ -46,7 +46,7 @@ const ICON=p=>`<svg viewBox="0 0 120 60"><defs><radialGradient id="g${p.id}" cx=
 function tilePic(p){const g=galOf(p.id);if(g.length)return 'fotos-problemas/'+encodeURI(g[0].src);const its=CAT.itens.filter(i=>i.k.includes(p.id)).sort(byPref);for(const i of its){const f=fichaOf(i.n);if(f&&f.img)return imgUrl(f.img)}return ''}
 function tile(p){const n=picks(p).length;const src=tilePic(p);
  return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n} produtos</small></button>`}
-function home(){document.documentElement.classList.add('home');
+function home(){document.documentElement.classList.add('home');const hr=document.querySelector('.hero');if(hr){hr.classList.remove('escolher');document.querySelectorAll('#tabs button').forEach((x,i)=>x.classList.toggle('on',i===0))}
  app.innerHTML=`<section class="band homehint"><p>Escreva a sujeira ou o que você quer limpar e toque em <b>Buscar</b>.</p></section>`;q.value='';scrollTo(0,0)}
 function list(items,probId,shown){
  const more=items.length-shown;
@@ -137,12 +137,16 @@ const LOCAIS=[
  ['🏢 Empresa, clínica e condomínio',['inox','aluminio','ralo','entupimento','desinfetar','piso','porcelanato','marmorerestauro','marmoreprotecao','banheiro','vidro','brilho','cheiro','higmaos','arcond','posobra','inseto','multiuso']]];
 const guia=document.getElementById('guia');
 function guiaRender(sel){const has=id=>PB[id]&&CAT.itens.some(i=>i.k.includes(id));
- let h=`<h3>Ou escolha onde você quer limpar:</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
+ let h=`<h3>Onde você quer limpar?</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
  if(sel!=null){h+=`<div class="step2"><h3>Qual é o problema?</h3><div class="chips">${LOCAIS[sel][1].filter(has).map(id=>`<button type="button" data-gp="${id}">${esc(PB[id].label)}</button>`).join('')}</div></div>`}
  guia.innerHTML=h}
 guia.addEventListener('click',e=>{const l=e.target.closest('[data-loc]');if(l){const i=+l.dataset.loc;guiaRender(i);const s2=guia.querySelector('.step2');if(s2)s2.scrollIntoView({behavior:'smooth',block:'nearest'});return}
  const g=e.target.closest('[data-gp]');if(g){const p=PB[g.dataset.gp];logSearch('[guiada] '+p.label,p.id);showProblem(p,[])}});
 guiaRender(null);
+const tabs=document.getElementById('tabs'),heroEl=document.querySelector('.hero');
+tabs.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;
+ tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+ const esc=b.dataset.tab==='escolher';heroEl.classList.toggle('escolher',esc);if(esc)guiaRender(null);else q.focus()});
 
 /* ============ TECLADO NA TELA ============ */
 const kb=document.getElementById('kb');
