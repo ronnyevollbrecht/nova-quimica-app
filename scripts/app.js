@@ -44,19 +44,30 @@ const byPref=(a,b)=>rank(a)-rank(b)||b.v-a.v;
 
 const ICON=p=>`<svg viewBox="0 0 120 60"><defs><radialGradient id="g${p.id}" cx=".32" cy=".3"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#7fdcff"/><stop offset="1" stop-color="#0083c4"/></radialGradient></defs><circle cx="38" cy="34" r="20" fill="url(#g${p.id})"/><circle cx="72" cy="22" r="11" fill="url(#g${p.id})"/><circle cx="88" cy="42" r="8" fill="url(#g${p.id})"/></svg>`;
 function tilePic(p){const g=galOf(p.id);if(g.length)return 'fotos-problemas/'+encodeURI(g[0].src);const its=CAT.itens.filter(i=>i.k.includes(p.id)).sort(byPref);for(const i of its){const f=fichaOf(i.n);if(f&&f.img)return imgUrl(f.img)}return ''}
-function tile(p){const n=CAT.itens.filter(i=>i.k.includes(p.id)).length;const src=tilePic(p);
- return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n} produtos</small></button>`}
+function tile(p){const n=picks(p).length;const src=tilePic(p);
+ return `<button class="prob" data-p="${p.id}"><span class="tp${src?"":" noimg"}${galOf(p.id).length?" gal1":""}">${src?`<img src="${src}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<i>${ICON(p)}</i></span><b>${p.label}</b><small>${n===1?'1 indicação':n+' indicações'}</small></button>`}
 function home(){const ps=PROBLEMS.filter(p=>CAT.itens.some(i=>i.k.includes(p.id)));
  app.innerHTML=`<section class="band"><h2>Escolha o seu problema</h2><div class="grid">${ps.map(tile).join('')}</div></section>`;q.value='';scrollTo(0,0)}
 function list(items,probId,shown){
  const more=items.length-shown;
  return items.slice(0,shown).map(i=>card(i,probId)).join('')+(more>0?`<button class="more" data-more="${probId||''}" data-shown="${shown}">Ver mais ${Math.min(more,PAGE)} de ${more} produtos</button>`:'')}
 let lastItems=[];
+/* até 5 indicações por problema: mais indicado primeiro, depois marcas; tamanhos do mesmo produto viram um cartão só */
+const MAXP=5;
+const famOf=n=>normTxt(n).replace(/\(.*?\)/g,' ').replace(/\b\d+([.,]\d+)?\s*(ML|L|LT|LTS|LITROS?|KG|G|GR|GRS|UN|UND)\b/g,' ').replace(/\b(GALAO|BOMBONA|BD|SC|FRASCO|REFIL)\b/g,' ').replace(/[^A-Z0-9]+/g,' ').trim();
+function picks(p){const all=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>tierOf(p,a)-tierOf(p,b)||byPref(a,b));
+ const fam=new Map();for(const i of all){const f=famOf(i.n);if(fam.has(f))fam.get(f).push(i);else fam.set(f,[i])}
+ /* variedade: no máximo 2 do mesmo grupo "mais indicado" antes de completar com o resto */
+ const gs=[...fam.values()],out=[],cnt={};
+ for(const g of gs){const t=tierOf(p,g[0]);if(out.length<MAXP&&(cnt[t]||0)<2){out.push(g);cnt[t]=(cnt[t]||0)+1}}
+ for(const g of gs){if(out.length>=MAXP)break;if(!out.includes(g))out.push(g)}
+ out.sort((a,b)=>gs.indexOf(a)-gs.indexOf(b));
+ return out.map(g=>Object.assign({},g[0],{alt:g.slice(1)}))}
 function showProblem(p,extra){
- lastItems=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>tierOf(p,a)-tierOf(p,b)||byPref(a,b));
+ lastItems=picks(p);
  app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button>
- <div class="res-h"><h2>${p.label}</h2><span>${lastItems.length} produto(s) em estoque</span></div>
- ${gallery(p)}${p.dica?`<div class="box dica"><b>Dica:</b> ${p.dica}</div>`:''}<div id="list">${list(lastItems,p.id,PAGE)}</div>
+ <div class="res-h"><h2>${p.label}</h2><span>${lastItems.length===1?'1 produto indicado':lastItems.length+' produtos indicados'}</span></div>
+ ${gallery(p)}${p.dica?`<div class="box dica"><b>Dica:</b> ${p.dica}</div>`:''}<div id="list">${lastItems.map(i=>card(i,p.id)).join('')}</div>
  ${extra&&extra.length?`<h2>Talvez você procure</h2><div class="grid">${extra.map(tile).join('')}</div>`:''}</section>`;scrollTo(0,0)}
 function showNames(items,text){
  lastItems=items;
@@ -71,6 +82,7 @@ function card(x,probId){
  return `<article class="card"><div class="pic" data-cod="${x.c}"${f&&f.img?` data-img="${imgUrl(f.img)}"`:FOTOSITE[x.c]?` data-img="${SITE_IMG+FOTOSITE[x.c][0]}" data-site="1"`:''}>${draw}</div>
  <div><h3 class="name">${pretty(x.n)}</h3><div class="brand">${(()=>{const b=brandOf(x.n);return b[1]?`<span class="chip">${b[1]}</span>`:''})()}Cód. ${x.c} · ${esc(x.u)}</div>
  <div class="tagrow">${x.p>0?`<span class="price">${brl(x.p)}</span>`:`<span class="price ask">Consulte o preço</span>`}${st}</div>
+ ${x.alt&&x.alt.length?`<p class="sizes"><b>Também temos:</b> ${x.alt.map(a=>esc(a.n.replace(/\s-\s.*$/,'').toLowerCase())+(a.p>0?' — '+brl(a.p):'')).join(' · ')}</p>`:''}
  ${f?`<p class="serve"><b>Para que serve:</b> ${f.d}</p>`:''}<b>Como usar</b><ol>${u.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
  <div class="box warn"><b>Cuidados:</b> ${u.cuid} Siga sempre as instruções do rótulo.</div>
  <div class="acts"><a class="buy" href="${buyUrl(x)}" target="_blank" rel="noopener">🛒 Comprar no site</a><a class="video" href="${yt}" target="_blank" rel="noopener">▶ Ver vídeos de como usar</a></div></div></article>`}
