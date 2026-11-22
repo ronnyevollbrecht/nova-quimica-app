@@ -279,3 +279,12 @@ const FOTOSITE={
 "039725":["amaciante_concentrado_15l_cha_branco_unica_aroma_1_20260709102621_2fc98ee3e88b.png","limpeza-geral/amaciantes/amaciante-concentrado-1-5l-cha-branco-unica-aromasil"],
 "039726":["amaciante_concentrado_15l_cha_branco_unica_aroma_1_20260709102621_2fc98ee3e88b.png","limpeza-geral/amaciantes/amaciante-concentrado-1-5l-cha-branco-unica-aromasil"]
 };
+
+/* fotos ilustrativas dos fabricantes (site oficial da marca): código NossoERP -> foto */
+const FOTOFAB={
+"002667": "https://www.ype.ind.br/assets-NS/neutro-500ml-(1)-1699368103-1793999927.png",
+"002726": "https://www.ype.ind.br/assets-NS/tixan_cartucho_400g_primavera_lateral_-1772202764-1794340016.png",
+"005005": "https://www.ype.ind.br/assets-NS/agua-sanitaria-1l-1.png",
+"034453": "https://www.ype.ind.br/assets-NS/tixan_cartucho_400g_primavera_lateral_-1772202764-1794340016.png",
+"037327": "https://www.ype.ind.br/assets-NS/clear-500ml.png"
+};
