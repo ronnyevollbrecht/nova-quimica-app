@@ -30,7 +30,8 @@ button:focus-visible,input:focus-visible{outline:4px solid var(--tag);outline-of
 .hero{position:relative;overflow:hidden;background:var(--navy);color:#fff;padding:22px max(4vw,16px) 28px}
 .hero>*{position:relative}
 .bub{position:absolute!important;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff 0 9%,#7fdcff 16%,#00AFF0 55%,#0077b8 100%);opacity:.9;pointer-events:none}
-h1{font-size:clamp(30px,4.4vw,52px);line-height:1.05;margin:0 0 16px;text-wrap:balance;font-weight:900;max-width:22ch}
+h1{font-size:clamp(44px,7.5vw,104px);line-height:1;margin:6px auto 20px;text-wrap:balance;font-weight:900;max-width:none;text-align:center;letter-spacing:-.01em}
+.hero .search{margin:0 auto}
 h1 em{font-style:normal;color:var(--blue)}
 .search{display:flex;gap:10px;background:#fff;border-radius:16px;padding:8px;max-width:1100px;box-shadow:0 0 0 4px var(--blue)}
 .search input{flex:1;border:0;font:inherit;font-size:clamp(18px,2.2vw,26px);padding:12px 14px;color:#232350;background:transparent;-webkit-user-select:text;user-select:text}
@@ -104,7 +105,7 @@ html:not(.tv) .top{padding:8px max(4vw,14px);border-bottom-width:4px}
 html:not(.tv) .logo img{height:clamp(46px,6vw,72px)}
 html:not(.tv) .hint{font-size:15px}
 html:not(.tv) .hero{padding:16px max(4vw,14px) 20px}
-html:not(.tv) h1{font-size:clamp(22px,3vw,34px);margin-bottom:12px}
+html:not(.tv) h1{font-size:clamp(34px,7vw,64px);margin:4px auto 14px}
 html:not(.tv) .search{padding:6px;border-radius:12px;box-shadow:0 0 0 3px var(--blue);max-width:820px}
 html:not(.tv) .search input{font-size:16px;padding:9px 10px}
 html:not(.tv) .search button{min-height:44px;font-size:16px;padding:0 18px;border-radius:9px}
@@ -171,9 +172,9 @@ html:not(.tv) .gal-item{flex-basis:min(100%,400px)}
   <span class="bub" style="width:56px;height:56px;right:16%;top:50px"></span>
   <span class="bub" style="width:34px;height:34px;right:4%;bottom:24px"></span>
   <span class="bub" style="width:80px;height:80px;right:24%;bottom:-36px;opacity:.6"></span>
-  <h1>Qual sujeira você quer <em>resolver</em> hoje?</h1>
+  <h1>O que você quer <em>limpar</em>?</h1>
   <form class="search" id="f">
-    <input id="q" placeholder="Ex.: piso cerâmico encardido" autocomplete="off" aria-label="Descreva seu problema">
+    <input id="q" placeholder="Ex.: piso encardido, mofo, vidro manchado" autocomplete="off" aria-label="Descreva seu problema">
     <button type="button" class="kbtoggle" id="kbt">Teclado</button>
     <button type="submit">Buscar</button>
   </form>
