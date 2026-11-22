@@ -38,6 +38,8 @@ const galOf=id=>(GAL[id]||[]).map(f=>typeof f==='string'?{src:f}:f).filter(f=>f&
 function gallery(p){const fs=galOf(p.id);if(!fs.length)return '';
  return `<div class="gal" aria-label="Fotos do problema"><div class="gal-track">${fs.map((f,i)=>`<figure class="gal-item"><img src="fotos-problemas/${encodeURI(f.src)}" alt="${esc(f.rotulo||p.label)}" loading="${i<2?'eager':'lazy'}" onerror="this.closest('figure').remove()">${f.rotulo?`<figcaption class="${/depois/i.test(f.rotulo)?'dep':''}">${esc(f.rotulo)}</figcaption>`:''}</figure>`).join('')}</div>${fs.length>1?`<div class="gal-dots">${fs.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}</div>`}
 const rank=i=>brandOf(i.n)[0];
+/* mais indicado primeiro (p.top, em ordem), depois a ordem das marcas */
+const tierOf=(p,x)=>{if(!p.top)return 0;const n=normTxt(x.n);const i=p.top.findIndex(r=>r.test(n));return i<0?p.top.length:i};
 const byPref=(a,b)=>rank(a)-rank(b)||b.v-a.v;
 
 const ICON=p=>`<svg viewBox="0 0 120 60"><defs><radialGradient id="g${p.id}" cx=".32" cy=".3"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#7fdcff"/><stop offset="1" stop-color="#0083c4"/></radialGradient></defs><circle cx="38" cy="34" r="20" fill="url(#g${p.id})"/><circle cx="72" cy="22" r="11" fill="url(#g${p.id})"/><circle cx="88" cy="42" r="8" fill="url(#g${p.id})"/></svg>`;
@@ -51,7 +53,7 @@ function list(items,probId,shown){
  return items.slice(0,shown).map(i=>card(i,probId)).join('')+(more>0?`<button class="more" data-more="${probId||''}" data-shown="${shown}">Ver mais ${Math.min(more,PAGE)} de ${more} produtos</button>`:'')}
 let lastItems=[];
 function showProblem(p,extra){
- lastItems=CAT.itens.filter(i=>i.k.includes(p.id)).sort(byPref);
+ lastItems=CAT.itens.filter(i=>i.k.includes(p.id)).sort((a,b)=>tierOf(p,a)-tierOf(p,b)||byPref(a,b));
  app.innerHTML=`<section class="band"><button class="back" data-home>← Voltar</button>
  <div class="res-h"><h2>${p.label}</h2><span>${lastItems.length} produto(s) em estoque</span></div>
  ${gallery(p)}${p.dica?`<div class="box dica"><b>Dica:</b> ${p.dica}</div>`:''}<div id="list">${list(lastItems,p.id,PAGE)}</div>
