@@ -1,7 +1,7 @@
 # App Consulta de Produtos — Nova Química
 
 App web (PWA) que roda na TV touch da loja, no celular e no computador: o cliente escreve a sujeira e o app mostra os produtos em estoque, com uso, preço e cuidados.
-Publicado no Netlify (site `nova-quimica-consulta`, repositório GitHub `nova-quimica-app`, id `cee2fab3-eb68-4313-a60c-673392c96dfc`), pasta publicada: `app/`. Cada push no `main` publica sozinho.
+Publicado no Netlify (site `nova-quimica-consulta`, repositório GitHub `nova-quimica-app`, id `cee2fab3-eb68-4313-a60c-673392c96dfc`), pasta publicada: `app/`. Cada push no `main` publica sozinho — e CADA publicação gasta 15 créditos do Netlify (plano Personal: 1.000/mês). Junte as mudanças e faça no máximo 1 push por dia/sessão; commits só de documentação levam `[skip netlify]` na mensagem para não publicar.
 
 ## Como o app é montado
 - `scripts/regras.js` — PROBLEMS (problemas/sujeiras: id, label, kw = palavras de busca, inc/exc = regex no NOME do produto, top = lista de regex do MAIS INDICADO em ordem. Regra do dono para a lista: 1º o produto Spartan mais indicado, 2º um Start, 3º um Audax, depois as demais marcas; evitar repetir o mesmo produto como destaque em vários problemas (leadsAll em app.js); tamanhos E fragrâncias do mesmo produto viram um cartão só (famOf/FRAG em app.js); mostra todos, 6 por vez com "Ver mais"), EXTRA (linhas com nome técnico → problemas), USO (modo de uso por tipo), BRANDS (ordem de preferência: Spartan, Start, Audax, depois as outras).
