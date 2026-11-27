@@ -128,14 +128,14 @@ const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Qu�
 
 /* ============ BUSCA GUIADA (Onde? -> Qual problema?) ============ */
 const LOCAIS=[
- ['🏠 Casa',['piso','porcelanato','laminado','pedra','pisocimento','brilho','removercera','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','vasoencardido','mofo','umidade','rejunte','poeira','gordura','vidro','desinfetar','cheiro','aromatizar','multiuso','estofado','madeira','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
- ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','pedra','pisocimento','piso','posobra','ferrugem','placas','piche','inseto','pulgas']],
- ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','riscos','farol','moto','capacete','rodas','pneu','motor','caminhao','couro','piche','arcond','maos']],
+ ['🏠 Casa',['piso','porcelanato','laminado','pedra','pisocimento','brilho','removercera','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','vasoencardido','mofo','umidade','rejunte','poeira','forro','gordura','vidro','desinfetar','cheiro','aromatizar','multiuso','estofado','madeira','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
+ ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','fachada','pedra','pisocimento','piso','posobra','ferrugem','placas','piche','inseto','pulgas']],
+ ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','riscos','overspray','insetocarro','farol','moto','capacete','rodas','pneu','motor','caminhao','couro','piche','arcond','maos']],
  ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
  ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','aluminio','frutas','higmaos','desinfetar','piso','ralo','entupimento','inseto','cheiro']],
- ['👕 Roupas e lavanderia',['roupaamarelada','roupa','tecido','passar','amaciar','maquina','umidade','traca']],
+ ['👕 Roupas e lavanderia',['roupaamarelada','roupa','roupacheiro','tenis','tecido','passar','amaciar','maquina','umidade','traca']],
  ['🐄 Fazenda e alimentos',['ordenha','pulgas','frutas','desinfetar','aguaconsumo','agua','inseto','caminhao','motor','maos']],
- ['🏢 Empresa, clínica e condomínio',['inox','aluminio','ralo','entupimento','desinfetar','piso','porcelanato','marmorerestauro','marmoreprotecao','cozinhaindustrial','hospital','lavanderiapro','banho','banheiro','vasoencardido','vidro','brilho','removercera','laminado','cheiro','aromatizar','higmaos','arcond','posobra','inseto','multiuso']]];
+ ['🏢 Empresa, clínica e condomínio',['inox','aluminio','ralo','entupimento','desinfetar','piso','porcelanato','marmorerestauro','marmoreprotecao','cozinhaindustrial','hospital','lavanderiapro','banho','acm','banheiro','vasoencardido','vidro','brilho','removercera','laminado','cheiro','aromatizar','higmaos','arcond','posobra','inseto','multiuso']]];
 const guia=document.getElementById('guia');
 function guiaRender(sel){const has=id=>PB[id]&&CAT.itens.some(i=>i.k.includes(id));
  let h=`<h3>Onde você quer limpar?</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
