@@ -22,9 +22,9 @@ const STOP=new Set(['de','da','do','das','dos','no','na','nos','nas','o','a','os
 const LOCAL=new Set(['banheiro','cozinha','quintal','carro','parede','ambiente','casa','area','externa','interior','sala','quarto','garagem','box','moto','caminhao']);
 const stem=w=>w.replace(/(oes|aes)$/,'ao').replace(/(is)$/,'l').replace(/s$/,'');
 function lev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;const v=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let prev=v[0];v[0]=i;let best=i;for(let j=1;j<=b.length;j++){const t=v[j];v[j]=Math.min(v[j]+1,v[j-1]+1,prev+(a[i-1]===b[j-1]?0:1));prev=t;if(v[j]<best)best=v[j]}if(best>max)return max+1}return v[b.length]}
-function wordHit(tok,kw){const a=stem(tok),b=stem(kw);if(a===b)return 1;if(b.length>=4&&(a.startsWith(b)||b.startsWith(a)&&a.length>=4))return .9;if(b.length>=4&&lev(a,b,b.length>=7?2:1)<=(b.length>=7?2:1))return .8;return 0}
+function wordHit(tok,kw){const a=stem(tok),b=stem(kw);if(a===b)return 1;if(b.length>=4&&(a.startsWith(b)||b.startsWith(a)&&a.length>=4))return .9;if(b.length>=4&&lev(a,b,b.length>=9?2:1)<=(b.length>=9?2:1))return .8;return 0}
 function findProblems(text){const t=low(text).replace(/[^a-z0-9 -]/g,' ');const toks=t.split(/\s+/).filter(w=>(w.length>=3||w==='tv'||w==='pc')&&!STOP.has(w));const r=[];
- PROBLEMS.forEach(p=>{let sc=0;for(const k0 of p.kw){const k=low(k0);if(k.includes(' ')){if(t.includes(k))sc+=k.length*1.2;else{const parts=k.split(' ').filter(w=>w.length>=3&&!STOP.has(w));if(parts.length>=2&&parts.every(w=>toks.some(x=>wordHit(x,w))))sc+=k.length*.6}}else{let best=0;for(const x of toks)best=Math.max(best,wordHit(x,k));sc+=best*k.length*(LOCAL.has(k)?.3:1)}}
+ PROBLEMS.forEach(p=>{let sc=0;for(const k0 of p.kw){const k=low(k0);if(k.includes(' ')){if(t.includes(k))sc+=k.length*1.2;else{const parts=k.split(' ').filter(w=>w.length>=3&&!STOP.has(w));if(parts.length>=2&&parts.every(w=>toks.some(x=>wordHit(x,w))))sc+=k.length*.6}}else{let best=0;for(const x of toks){const L=(k.length>x.length+2&&k.startsWith(x))?x.length+1:k.length;best=Math.max(best,wordHit(x,k)*L)}sc+=best*(LOCAL.has(k)&&toks.length>1?.3:1)}}
  for(const w of low(p.label).split(/[^a-z]+/).filter(w=>w.length>=4&&!STOP.has(w))){if(toks.some(x=>wordHit(x,w)>=.9))sc+=2}
  if(sc)r.push([sc,p])});return r.sort((a,b)=>b[0]-a[0]).map(x=>x[1])}
 function findByName(text){const w=low(text).split(/\s+/).filter(x=>x.length>=3);if(!w.length)return [];return CAT.itens.filter(i=>{const n=low(i.n);return w.every(x=>n.includes(x))}).sort(byPref)}
@@ -128,13 +128,14 @@ const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Qu�
 
 /* ============ BUSCA GUIADA (Onde? -> Qual problema?) ============ */
 const LOCAIS=[
- ['🏠 Casa',['piso','porcelanato','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','mofo','rejunte','gordura','vidro','desinfetar','cheiro','multiuso','estofado','madeira','brilho','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
- ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','piso','posobra','ferrugem','placas','piche']],
- ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','couro','piche','arcond','maos']],
+ ['🏠 Casa',['piso','porcelanato','laminado','pedra','pisocimento','brilho','removercera','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','mofo','umidade','rejunte','gordura','vidro','desinfetar','cheiro','aromatizar','multiuso','estofado','madeira','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
+ ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','pedra','pisocimento','piso','posobra','ferrugem','placas','piche','inseto']],
+ ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','rodas','pneu','motor','caminhao','couro','piche','arcond','maos']],
  ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
  ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','aluminio','frutas','higmaos','desinfetar','piso','ralo','entupimento','inseto','cheiro']],
- ['👕 Roupas e lavanderia',['roupaamarelada','roupa','tecido','passar','amaciar','maquina']],
- ['🏢 Empresa, clínica e condomínio',['inox','aluminio','ralo','entupimento','desinfetar','piso','porcelanato','marmorerestauro','marmoreprotecao','banheiro','vidro','brilho','cheiro','higmaos','arcond','posobra','inseto','multiuso']]];
+ ['👕 Roupas e lavanderia',['roupaamarelada','roupa','tecido','passar','amaciar','maquina','umidade','traca']],
+ ['🐄 Fazenda e alimentos',['ordenha','frutas','desinfetar','aguaconsumo','agua','inseto','caminhao','motor','maos']],
+ ['🏢 Empresa, clínica e condomínio',['inox','aluminio','ralo','entupimento','desinfetar','piso','porcelanato','marmorerestauro','marmoreprotecao','banheiro','vidro','brilho','removercera','laminado','cheiro','aromatizar','higmaos','arcond','posobra','inseto','multiuso']]];
 const guia=document.getElementById('guia');
 function guiaRender(sel){const has=id=>PB[id]&&CAT.itens.some(i=>i.k.includes(id));
  let h=`<h3>Onde você quer limpar?</h3><div class="chips">${LOCAIS.map((l,i)=>`<button type="button" data-loc="${i}" class="${sel===i?'on':''}">${l[0]}</button>`).join('')}</div>`;
