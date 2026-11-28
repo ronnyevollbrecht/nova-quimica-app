@@ -11,7 +11,7 @@ Publicado no Netlify (site `nova-quimica-consulta`, repositório GitHub `nova-qu
 - `dados/estoque-linhas.json` — linhas da planilha "Estoque x Vendas" do NossoERP (sem custo). NUNCA colocar custo no repositório.
 - Depois de mudar regras: `node scripts/rebuild.js && python3 scripts/build.py` (recria `app/produtos.json` e embute tudo em `app/index.html`). Conferir com `node --check` no script extraído.
 
-- REGRA DO DONO: linha automotiva (Vonixx, Lincoln, Alcance, Soft99, Protelim, Voxer, TP Química, Esteio de Rondônia, detergentes ácido/alcalino Nova Química NQ/DX, Start NPF e FX Ativado) NUNCA aparece em pisos ou limpeza da casa — só nos problemas de veículo (AUTOLINE/AUTOPROB em regras.js). Lavagem pesada de caminhão = problema `caminhao`.
+- REGRA DO DONO: linha automotiva (Vonixx, Lincoln, Alcance, Soft99, Protelim, Voxer, TP Química, Esteio de Rondônia, detergentes ácido/alcalino Nova Química NQ/DX, Start NPF e FX Ativado) NUNCA aparece em pisos ou limpeza da casa — só nos problemas de veículo (AUTOLINE/AUTOPROB em regras.js). Lavagem pesada de caminhão = problema `caminhao`. Exceções liberadas pelo dono: Delet e APCs (Sintra, Pluri, Ultra Limpador Autoclean) podem aparecer em tênis, borracha, geladeira e forro de PVC.
 
 ## Revisão semanal (aprender novas sujeiras)
 1. Ler as buscas da semana no formulário "buscas" do site (Netlify → forms → submissions): campos termo, resultado (id do problema, `nome-produto` ou `NAO_ENCONTRADO`), origem (tv/web).
