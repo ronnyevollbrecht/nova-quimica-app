@@ -128,9 +128,9 @@ const wppUrl=x=>'https://wa.me/'+WPP+'?text='+encodeURIComponent('Olá, Nova Qu�
 
 /* ============ BUSCA GUIADA (Onde? -> Qual problema?) ============ */
 const LOCAIS=[
- ['🏠 Casa',['piso','pisodiario','porcelanato','laminado','pedra','pisocimento','brilho','removercera','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','vasoencardido','mofo','umidade','rejunte','poeira','forro','gordura','vidro','desinfetar','cheiro','aromatizar','multiuso','estofado','madeira','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
+ ['🏠 Casa',['piso','pisodiario','porcelanato','laminado','pedra','pisocimento','brilho','removercera','marmorelimpeza','marmorerestauro','marmoreprotecao','banheiro','vasoencardido','mofo','umidade','rejunte','poeira','forro','gordura','geladeira','vidro','desinfetar','cheiro','aromatizar','multiuso','estofado','madeira','inox','aluminio','panela','ralo','entupimento','inseto','traca','pet','telas','louca','frutas','higmaos','lubrificar','ferrugem','aguaconsumo','agua']],
  ['🌿 Quintal e área externa',['aguaconsumo','lodo','mato','fachada','pedra','pisocimento','piso','posobra','ferrugem','placas','piche','inseto','pulgas']],
- ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','riscos','overspray','insetocarro','farol','moto','capacete','rodas','pneu','motor','caminhao','couro','piche','arcond','maos']],
+ ['🚗 Carro e moto',['carro','chuvaacida','descontaminacao','parabrisa','interiorcarro','cheirocarro','plastico','pintura','riscos','borracha','overspray','insetocarro','farol','moto','capacete','rodas','pneu','motor','caminhao','couro','piche','arcond','maos']],
  ['🏊 Piscina',['piscina','piscinaturva','piscinaph','piscinamanut','piscinaborda','piscinametal']],
  ['🍳 Restaurante e cozinha',['grill','gordura','louca','inox','aluminio','frutas','higmaos','desinfetar','piso','ralo','entupimento','inseto','cheiro']],
  ['👕 Roupas e lavanderia',['roupaamarelada','roupa','roupacheiro','tenis','tecido','passar','amaciar','maquina','umidade','traca']],
